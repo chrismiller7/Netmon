@@ -10,6 +10,7 @@ Scheduler.prototype.addTask = function(taskName, runFunc)
 {
 	var hasTask = Enumerable.from(this.queue).any(i=>i.taskName==taskName);
 	if (!hasTask) {
+		console.log("Queued task: " + taskName);
 		this.queue.push({taskName:taskName, runFunc:runFunc});
 		this.startNext();
 	}
@@ -21,7 +22,6 @@ Scheduler.prototype.startNext = function()
 	{
 		this.isRunningTask = true;
 		var item = this.queue.shift();
-		console.log("Starting task: " + item.taskName);
 		item.runFunc()
 		.then(()=>{
 			console.log("Ending task: " + item.taskName); 

@@ -31,17 +31,16 @@ function Task(db, conf, scheduler, debug)
 	var thisTask = this;
 
 	cron.schedule(conf.cron, function() {
-		//console.log("starting task: " + conf.name);
-		//thisTask.Run();
 		scheduler.addTask(conf.name, thisTask.Run.bind(thisTask));
 	});
 }
 
 Task.prototype.Run = function()
 {
-	console.log("Run task!");
 	if (this.isRunning) return Promise.resolve();
 
+	console.log("");
+	console.log("Running task: " + this.conf.name);
 	this.isRunning = true;
 	this.startTime = new Date();
 	if (this.conf.options.timeout) {
@@ -63,11 +62,13 @@ Task.prototype.Stop = function()
 
 Task.prototype.success = function(msg, data)
 {
+	console.log("Task SUCCESS: " + msg);
 	this.dbInsert(true, msg, data);
 }
 
 Task.prototype.fail = function(failMsg, data)
 {
+	console.log("Task Failed: " + failMsg);
 	this.dbInsert(false, failMsg, data);
 }
 
