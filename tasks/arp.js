@@ -43,7 +43,9 @@ Task.prototype.Run = function(task, options)
 		//task.log("Rx ARP"); 
 		var dec = pcap.decode.packet(raw);
 		var arp = dec.payload.payload;
-		//task.log(arp);
+		console.log("Rx ARP:");
+		console.log(arp);
+		if (arp == null || arp.sender_ha == null) return;
 		arp.sender_ha = toMac(arp.sender_ha.addr);
 		arp.sender_pa = toIp(arp.sender_pa.addr);
 		arp.target_ha = toMac(arp.target_ha.addr);
@@ -98,7 +100,7 @@ Task.prototype.Close = function()
 
 function getTime(pcap)
 {
-	console.log(pcap);
+	//console.log(pcap);
 	return pcap.pcap_header.tv_sec + pcap.pcap_header.tv_usec/1000000;
 }
 
